@@ -36,17 +36,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 20,
   },
   greeting: {
-    
+    fontSize: 32,
+    color: colors.heading,
+    fontFamily: fonts.text,
   },
   userName: {
-    
+    fontSize: 32,
+    fontFamily: fonts.heading,
+    color: colors.heading,
+    lineHeight: 40,
   },
   image: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     borderRadius: 40,
   },
 })
