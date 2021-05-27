@@ -6,7 +6,9 @@ import {
   View,
   Text,
   TextInput,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
@@ -37,7 +39,7 @@ export const UserIdentification = () => {
   }
 
   const handleInputChange = (value: string) => {
-    setIsFocused(!!value);
+    setIsFilled(!!value);
     setName(value);
   }
 
@@ -48,42 +50,44 @@ export const UserIdentification = () => {
         style={styles.container}
         behavior={Platform.OS === 'android' ? 'height': 'padding'}
       >
-        <View style={styles.content}>
-          <View style={styles.form}>
-            
-            <View style={styles.header}>
-              <Text style={styles.emoji}>
-                😁
-              </Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.content}>
+            <View style={styles.form}>
+              
+              <View style={styles.header}>
+                <Text style={styles.emoji}>
+                  { isFilled ? '😄' : '😃' }
+                </Text>
 
-              <Text style={styles.title}>
-                Como podemos{'\n'} 
-                chamar você?
-              </Text>
-            </View>
+                <Text style={styles.title}>
+                  Como podemos{'\n'} 
+                  chamar você?
+                </Text>
+              </View>
 
-            <TextInput 
-              style={[
-                styles.input,
-                (isFocused || isFilled) && {
-                  borderColor: colors.green,
-                }
-              ]} 
-              placeholder="Digite um nome"
-              onBlur={handleInputBlur}
-              onFocus={handleInputFocus}
-              onChangeText={handleInputChange}
-            />
-            
-            <View style={styles.buttonContainer}>
-              <Button 
-                title='Confirmar'
-                onPress={handleConfirmation}
+              <TextInput 
+                style={[
+                  styles.input,
+                  (isFocused || isFilled) && {
+                    borderColor: colors.green,
+                  }
+                ]} 
+                placeholder="Digite um nome"
+                onBlur={handleInputBlur}
+                onFocus={handleInputFocus}
+                onChangeText={handleInputChange}
               />
-            </View>
+              
+              <View style={styles.buttonContainer}>
+                <Button 
+                  title='Confirmar'
+                  onPress={handleConfirmation}
+                />
+              </View>
 
+            </View>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </View>
   );
