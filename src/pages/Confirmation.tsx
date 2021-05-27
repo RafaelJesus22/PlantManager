@@ -4,7 +4,8 @@ import {
   StatusBar,
   View,
   Text
-} from 'react-native'
+} from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 
 import { Button } from '../components/Button';
 
@@ -12,6 +13,13 @@ import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
 export const Confirmation = () => {
+  
+  const navigation = useNavigation();
+  
+  const handleMoveOn =() => {
+    navigation.navigate('PlantSelect')
+  }
+  
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -32,6 +40,7 @@ export const Confirmation = () => {
         <View style={styles.buttonContainer}>
           <Button
             title='Começar'
+            onPress={handleMoveOn}
           />
         </View>
 
