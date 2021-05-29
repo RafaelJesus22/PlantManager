@@ -9,6 +9,8 @@ import {
 
 import { Header } from '../components/Header';
 import { EnvironmentButton } from '../components/EnvironmentButton';
+import { Load } from '../components/Load';
+import { Primary } from '../components/PlantCard/Primary';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -18,7 +20,6 @@ import {
   plants_data,
   plants_environments,
 } from '../services/mockData';
-import { Primary } from '../components/PlantCard/Primary';
 
 
 export interface EnvironmentProps {
@@ -43,13 +44,13 @@ export const PlantSelect = () => {
   const [environments, setEnvironments] = useState<EnvironmentProps[]>([]);
   const [plants, setPlants] = useState<PlantProps[]>();
   const [filterdPlants, setFilterdPlants] = useState<PlantProps[]>();
-  const [environmentSelected, setEnvironmentSelected] = useState('all')
+  const [environmentSelected, setEnvironmentSelected] = useState('all');
+  const [loading, setLoading] = useState(true)
 
   const handleEnvironmentSelected = (environment: string) => {
     setEnvironmentSelected(environment);
 
-    if (environment === 'all')
-      return setFilterdPlants(plants);
+    if (environment === 'all') return setFilterdPlants(plants);
     
     const filtered = plants?.filter(plant => 
       plant.environments.includes(environment)
@@ -84,6 +85,8 @@ export const PlantSelect = () => {
       const plants = plants_data();
       
       setPlants(plants);
+      setFilterdPlants(plants);
+      setLoading(false);
     }
 
     fecthPlants()
@@ -91,6 +94,8 @@ export const PlantSelect = () => {
       .catch(err => console.log('errp: ', err))
 
   }, [])
+
+  if (loading) return <Load />
 
   return (
     <View style={styles.container}>
