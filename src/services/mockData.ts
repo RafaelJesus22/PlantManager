@@ -135,7 +135,7 @@ const mock = {
   ]
 }
 
-export const plants = () => {
+export const plants_data = () => {
   return mock.plants;
 }
 

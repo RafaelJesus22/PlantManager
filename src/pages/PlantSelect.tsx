@@ -15,23 +15,53 @@ import fonts from '../styles/fonts';
 import api from '../services/api';
 
 import { 
+  plants_data,
   plants_environments,
 } from '../services/mockData';
+import { Primary } from '../components/PlantCard/Primary';
 
 
-interface EnvironmentProps {
+export interface EnvironmentProps {
   key: string;
   title: string;
 }
 
+export interface PlantProps {
+  id: number;
+  name: string;
+  about: string;
+  water_tips: string;
+  photo: string;
+  environments: string[];
+  frequency: {
+    times: number;
+    repeat_every: string;
+  }
+}
 
 export const PlantSelect = () => {
-  const [environments, setEnvironments] = useState<EnvironmentProps[]>();
+  const [environments, setEnvironments] = useState<EnvironmentProps[]>([]);
+  const [plants, setPlants] = useState<PlantProps[]>();
+  const [filterdPlants, setFilterdPlants] = useState<PlantProps[]>();
+  const [environmentSelected, setEnvironmentSelected] = useState('all')
+
+  const handleEnvironmentSelected = (environment: string) => {
+    setEnvironmentSelected(environment);
+
+    if (environment === 'all')
+      return setFilterdPlants(plants);
+    
+    const filtered = plants?.filter(plant => 
+      plant.environments.includes(environment)
+    );
+
+    setFilterdPlants(filtered);
+  }
 
   useEffect(() => {
     async function fecthEviroment() {
-      // const { data } = await api.get('plants_environments') //API version
-      const plantsEnvironments = plants_environments()
+      // const { data } = await api.get('plants_environments?_sort=title&order=asc')
+      const plantsEnvironments = plants_environments();
       
       setEnvironments([
         {
@@ -43,6 +73,20 @@ export const PlantSelect = () => {
     }
 
     fecthEviroment()
+      .then(res => console.log('ok', res))
+      .catch(err => console.log('errp: ', err))
+
+  }, [])
+  
+  useEffect(() => {
+    async function fecthPlants() {
+      // const { data } = await api.get('plants?_sort=name&order=asc')
+      const plants = plants_data();
+      
+      setPlants(plants);
+    }
+
+    fecthPlants()
       .then(res => console.log('ok', res))
       .catch(err => console.log('errp: ', err))
 
@@ -67,13 +111,30 @@ export const PlantSelect = () => {
             data={environments}
             renderItem={({ item }) => (
               <EnvironmentButton 
-                title={item.title} 
+                title={item.title}
+                active={item.key === environmentSelected} 
+                onPress={() => handleEnvironmentSelected(item.key)}
               />
             )}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.enviromentList}
           />
+        </View>
+
+        <View style={styles.plants}>
+          <FlatList 
+            data={filterdPlants}
+            showsVerticalScrollIndicator={false}
+            numColumns={2}
+            contentContainerStyle={styles.contentContainerStyles}
+            renderItem={({ item }) => (
+              <Primary 
+                data={item}
+              />
+            )}
+          />
+
         </View>
 
       </View>
@@ -118,5 +179,13 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     marginLeft: 32,
     marginVertical: 32,
-  }
+    paddingRight: 40,
+  },
+  plants: {
+    flex: 1,
+    paddingHorizontal: 32,
+    justifyContent: 'center',
+  },
+  contentContainerStyles: {
+  },
 })
