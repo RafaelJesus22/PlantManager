@@ -4,7 +4,8 @@ import {
   StatusBar,
   View,
   Text,
-  FlatList
+  FlatList,
+  ActivityIndicator
 } from 'react-native'
 
 import { Header } from '../components/Header';
@@ -40,12 +41,39 @@ export interface PlantProps {
   }
 }
 
+// PAROU EM 1:26:23
 export const PlantSelect = () => {
   const [environments, setEnvironments] = useState<EnvironmentProps[]>([]);
   const [plants, setPlants] = useState<PlantProps[]>();
   const [filterdPlants, setFilterdPlants] = useState<PlantProps[]>();
   const [environmentSelected, setEnvironmentSelected] = useState('all');
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
+
+  const [page, setPage] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [loadedAll, setLoadedAll] = useState(false);
+
+
+  async function fecthPlants() {
+    // const { data } = await api
+    // .get(`plants?_sort=name&order=asc&_page=${page}&_limit=8`)
+
+    // if (!data) return setLoading(true);
+
+    // if (page > 1) {
+    //   setPlants(oldValue => [...oldValue, ...data])
+    // } else {
+    //   setPlants(data);
+    //   setFilterdPlants(data);
+    // }
+
+    const plants = plants_data();
+    setPlants(plants);
+    setFilterdPlants(plants);
+    setLoading(false);
+    setLoadingMore(false);
+  }
+
 
   const handleEnvironmentSelected = (environment: string) => {
     setEnvironmentSelected(environment);
@@ -57,6 +85,12 @@ export const PlantSelect = () => {
     );
 
     setFilterdPlants(filtered);
+  }
+
+  const handleFetchMore = (distance: number) => {
+    if (distance < 1) return;
+    setLoadingMore(true);
+    setPage(oldValue => oldValue + 1);
   }
 
   useEffect(() => {
@@ -80,19 +114,7 @@ export const PlantSelect = () => {
   }, [])
   
   useEffect(() => {
-    async function fecthPlants() {
-      // const { data } = await api.get('plants?_sort=name&order=asc')
-      const plants = plants_data();
-      
-      setPlants(plants);
-      setFilterdPlants(plants);
-      setLoading(false);
-    }
-
-    fecthPlants()
-      .then(res => console.log('ok', res))
-      .catch(err => console.log('errp: ', err))
-
+    fecthPlants();
   }, [])
 
   if (loading) return <Load />
@@ -133,6 +155,15 @@ export const PlantSelect = () => {
             showsVerticalScrollIndicator={false}
             numColumns={2}
             contentContainerStyle={styles.contentContainerStyles}
+            onEndReachedThreshold={0.1}
+            onEndReached={({ distanceFromEnd }) => 
+              handleFetchMore(distanceFromEnd)
+            }
+            ListFooterComponent={
+              loadingMore 
+              ? <ActivityIndicator color={colors.green} />
+              : <></>
+            }
             renderItem={({ item }) => (
               <Primary 
                 data={item}
@@ -151,16 +182,10 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: StatusBar.currentHeight,
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'space-around',
-    // backgroundColor: colors.background,
   },
   content: {
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
     width: '100%',
-    // padding: 20,
   },
   header: {
     paddingHorizontal: 30,
