@@ -55,21 +55,21 @@ export const PlantSelect = () => {
 
 
   async function fecthPlants() {
-    // const { data } = await api
-    // .get(`plants?_sort=name&order=asc&_page=${page}&_limit=8`)
+    const { data } = await api
+    .get(`plants?_sort=name&order=asc&_page=${page}&_limit=10`)
 
-    // if (!data) return setLoading(true);
+    if (!data) return setLoading(true);
 
-    // if (page > 1) {
-    //   setPlants(oldValue => [...oldValue, ...data])
-    // } else {
-    //   setPlants(data);
-    //   setFilterdPlants(data);
-    // }
+    if (page > 1) {
+      setPlants(oldValue => [...oldValue, ...data])
+    } else {
+      setPlants(data);
+      setFilterdPlants(data);
+    }
 
-    const plants = plants_data();
-    setPlants(plants);
-    setFilterdPlants(plants);
+    // const plants = plants_data();
+    // setPlants(plants);
+    // setFilterdPlants(plants);
     setLoading(false);
     setLoadingMore(false);
   }
@@ -95,22 +95,19 @@ export const PlantSelect = () => {
 
   useEffect(() => {
     async function fecthEviroment() {
-      // const { data } = await api.get('plants_environments?_sort=title&order=asc')
-      const plantsEnvironments = plants_environments();
+      const { data } = await api.get('plants_environments?_sort=title&order=asc')
+      // const data = plants_environments();
       
       setEnvironments([
         {
           key: 'all',
           title: 'todos'
         },
-        ...plantsEnvironments,
+        ...data,
       ]);
     }
 
-    fecthEviroment()
-      .then(res => console.log('ok', res))
-      .catch(err => console.log('errp: ', err))
-
+    fecthEviroment();
   }, [])
   
   useEffect(() => {
