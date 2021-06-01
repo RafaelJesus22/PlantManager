@@ -41,7 +41,7 @@ export interface PlantProps {
   }
 }
 
-// PAROU EM 1:26:23
+
 export const PlantSelect = () => {
   const [environments, setEnvironments] = useState<EnvironmentProps[]>([]);
   const [plants, setPlants] = useState<PlantProps[]>();
@@ -133,6 +133,7 @@ export const PlantSelect = () => {
         <View>
           <FlatList 
             data={environments}
+            keyExtractor={item => item.key.toString()}
             renderItem={({ item }) => (
               <EnvironmentButton 
                 title={item.title}
@@ -149,6 +150,7 @@ export const PlantSelect = () => {
         <View style={styles.plants}>
           <FlatList 
             data={filterdPlants}
+            keyExtractor={item => String(item.id)}
             showsVerticalScrollIndicator={false}
             numColumns={2}
             contentContainerStyle={styles.contentContainerStyles}
