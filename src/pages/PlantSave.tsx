@@ -11,29 +11,38 @@ import {
   ScrollView
 } from 'react-native';
 import { SvgFromUri } from 'react-native-svg';
+import { useRoute } from '@react-navigation/core';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import waterDrop from '../assets/waterdrop.png';
 
 import { Button } from '../components/Button';
+import { PlantProps } from './PlantSelect';
+
+interface Params {
+  plant: PlantProps;
+}
 
 export const PlantSave = () => {
+
+  const route = useRoute();
+  const { plant } = route.params as Params;
+
   return (
     <View style={styles.container}>
       <View style={styles.plantInfo}>
         <SvgFromUri 
-          uri=''
+          uri={ plant.photo }
           height={150}
           width={150}
         />
 
         <Text style={styles.plantName}>
-          Nome da planta
+          {plant.name}
         </Text>
         <Text style={styles.plantAbout}>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-          Qui, enim aliquam eveniet impedit officia eligendi amet
+          {plant.about}
         </Text>
       </View>
 
@@ -44,7 +53,7 @@ export const PlantSave = () => {
             style={styles.tipImage}
           />
           <Text style={styles.tipText}>
-            Lorem, ipsum dolor sit amet consectetur adipisicing.
+            {plant.water_tips}
           </Text>
         </View>
 

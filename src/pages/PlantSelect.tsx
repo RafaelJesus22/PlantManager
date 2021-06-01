@@ -96,7 +96,7 @@ export const PlantSelect = () => {
   }
 
   const handlePlantSelect = (plant: PlantProps) => {
-    navigation.navigate('PlantSave')
+    navigation.navigate('PlantSave', { plant })
   }
 
   useEffect(() => {
