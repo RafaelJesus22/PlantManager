@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { SvgFromUri } from 'react-native-svg';
 import { useRoute } from '@react-navigation/core';
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
+import { format, isBefore } from 'date-fns';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -26,8 +28,24 @@ interface Params {
 
 export const PlantSave = () => {
 
+  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(Platform.OS == 'ios');
+
   const route = useRoute();
   const { plant } = route.params as Params;
+
+  const handleChangeTime = (e: Event, dateTime: Date | undefined) => {
+    if (Platform.OS == 'android') {
+      setShowDatePicker(oldState => !oldState);
+    }
+
+    if (dateTime && isBefore(dateTime, new Date())) {
+      setSelectedDateTime(new Date());
+      return Alert.alert("Escolha uma data no futuro!");
+    }
+
+    if (dateTime) setSelectedDateTime(dateTime);
+  }
 
   return (
     <View style={styles.container}>
@@ -60,6 +78,27 @@ export const PlantSave = () => {
         <Text style={styles.alertLabel}>
           Escolha o melhor horário para ser lembrado
         </Text>
+
+
+        {Platform.OS === 'android' && (
+          <TouchableOpacity 
+            onPress={() => setShowDatePicker(oldState => !oldState)}
+            style={styles.dateTimePickerButton}
+          >
+            <Text style={styles.dateTimePickerText}>
+              {`Mudar ${format(selectedDateTime, 'HH:mm')}`}
+            </Text>
+          </TouchableOpacity>
+        )}
+
+        {showDatePicker &&
+          <DateTimePicker
+            value={selectedDateTime}
+            mode="time"
+            display="spinner"
+            onChange={handleChangeTime}
+          />
+        }
 
         <Button
           title="Cadastrar planta"
@@ -132,4 +171,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 5,
   },
+  dateTimePickerButton: {
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  dateTimePickerText: {
+    color: colors.heading,
+    fontSize: 24,
+    fontFamily: fonts.text,
+  }
 })
