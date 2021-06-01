@@ -21,6 +21,7 @@ import {
   plants_data,
   plants_environments,
 } from '../services/mockData';
+import { useNavigation } from '@react-navigation/core';
 
 
 export interface EnvironmentProps {
@@ -51,7 +52,8 @@ export const PlantSelect = () => {
 
   const [page, setPage] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [loadedAll, setLoadedAll] = useState(false);
+
+  const navigation = useNavigation();
 
 
   async function fecthPlants() {
@@ -91,6 +93,10 @@ export const PlantSelect = () => {
     if (distance < 1) return;
     setLoadingMore(true);
     setPage(oldValue => oldValue + 1);
+  }
+
+  const handlePlantSelect = (plant: PlantProps) => {
+    navigation.navigate('PlantSave')
   }
 
   useEffect(() => {
@@ -166,6 +172,7 @@ export const PlantSelect = () => {
             renderItem={({ item }) => (
               <Primary 
                 data={item}
+                onPress={() => handlePlantSelect(item)}
               />
             )}
           />
