@@ -7,6 +7,9 @@ import {
   FlatList,
   ActivityIndicator
 } from 'react-native'
+import { useNavigation } from '@react-navigation/core';
+import { PlantProps } from '../libs/storage';
+
 
 import { Header } from '../components/Header';
 import { EnvironmentButton } from '../components/EnvironmentButton';
@@ -21,7 +24,6 @@ import {
   plants_data,
   plants_environments,
 } from '../services/mockData';
-import { useNavigation } from '@react-navigation/core';
 
 
 export interface EnvironmentProps {
@@ -29,18 +31,6 @@ export interface EnvironmentProps {
   title: string;
 }
 
-export interface PlantProps {
-  id: number;
-  name: string;
-  about: string;
-  water_tips: string;
-  photo: string;
-  environments: string[];
-  frequency: {
-    times: number;
-    repeat_every: string;
-  }
-}
 
 
 export const PlantSelect = () => {

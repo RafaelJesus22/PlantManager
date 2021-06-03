@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -20,7 +20,7 @@ import fonts from '../styles/fonts';
 import waterDrop from '../assets/waterdrop.png';
 
 import { Button } from '../components/Button';
-import { PlantProps } from './PlantSelect';
+import { loadPlant, PlantProps, savePlant } from '../libs/storage';
 
 interface Params {
   plant: PlantProps;
@@ -45,6 +45,18 @@ export const PlantSave = () => {
     }
 
     if (dateTime) setSelectedDateTime(dateTime);
+  }
+
+  const handleSavePlant = async () => {
+    try {
+      await savePlant({
+        ...plant,
+        dateTimeNotification: selectedDateTime
+      });
+
+    } catch {
+      Alert.alert('Não foi possivel salvar. 🥺')
+    }
   }
 
   return (
@@ -102,7 +114,7 @@ export const PlantSave = () => {
 
         <Button
           title="Cadastrar planta"
-          onPress={() => {}}
+          onPress={() => handleSavePlant()}
         />
       </View>
     </View>
