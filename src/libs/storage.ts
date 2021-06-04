@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { useNavigation } from '@react-navigation/core';
 import { format } from 'date-fns';
 
 
@@ -26,6 +27,7 @@ export const savePlant = async (plant: PlantProps): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem('@plantmanager:plants');
     const oldPlants = data ? (JSON.parse(data) as StoragePlantProps) : {};
+    // const navigation = useNavigation();
 
     const newPlant = {
       [plant.id]: {
@@ -39,7 +41,17 @@ export const savePlant = async (plant: PlantProps): Promise<void> => {
         ...oldPlants
       })
     );
+
+    // navigation.navigate('Confirmation', {
+    //   title: 'Tudo certo',
+    //   subtitle: 'Fique tranquilo que sempre vamos lembrar você de cuidar da sua plantinha com muito cuidado',
+    //   buttonTitle: 'Muito obrigado',
+    //   icon: 'hug',
+    //   nextScreen: 'MyPlants',
+    // });
+
   } catch (err) {
+    console.log('erro da função', err)
     throw new Error(err);
   }
 }

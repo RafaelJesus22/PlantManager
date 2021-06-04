@@ -54,7 +54,10 @@ export const PlantSave = () => {
         dateTimeNotification: selectedDateTime
       });
 
-    } catch {
+      Alert.alert('Sucesso')
+
+    } catch (err) {
+      console.log('erro da tela',err)
       Alert.alert('Não foi possivel salvar. 🥺')
     }
   }
