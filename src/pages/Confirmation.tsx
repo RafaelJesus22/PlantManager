@@ -5,19 +5,42 @@ import {
   View,
   Text
 } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 
 import { Button } from '../components/Button';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
+
+interface Params {
+  title: string;
+  subtitle: string;
+  buttonTitle: string;
+  icon: 'smile' | 'hug',
+  nextScreen: string;
+}
+
+const emojis = {
+  smile: '😁' as string,
+  hug: '😁' as string
+}
+
 export const Confirmation = () => {
   
   const navigation = useNavigation();
-  
+  const routes = useRoute();
+
+  const {
+    title,
+    subtitle,
+    icon,
+    nextScreen,
+    buttonTitle
+  }  = routes.params as Params
+
   const handleMoveOn =() => {
-    navigation.navigate('PlantSelect')
+    navigation.navigate(nextScreen)
   }
   
   return (
@@ -25,21 +48,20 @@ export const Confirmation = () => {
       <View style={styles.content}>
 
         <Text style={styles.emoji}>
-          😁
+          {emojis[icon]}
         </Text>
 
         <Text style={styles.title}>
-          Prontinho
+          {title}
         </Text>
 
         <Text style={styles.subtitle}>
-          Vamos começar a cuidar das suas
-          platinhas com muito cuidado 
+          {subtitle}
         </Text>
 
         <View style={styles.buttonContainer}>
           <Button
-            title='Começar'
+            title={buttonTitle}
             onPress={handleMoveOn}
           />
         </View>
