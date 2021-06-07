@@ -14,7 +14,7 @@ import { PlantProps } from '../libs/storage';
 import { Header } from '../components/Header';
 import { EnvironmentButton } from '../components/EnvironmentButton';
 import { Load } from '../components/Load';
-import { Primary } from '../components/PlantCard/Primary';
+import { PrimaryPlantCard } from '../components/PlantCard/Primary';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -160,7 +160,7 @@ export const PlantSelect = () => {
               : <></>
             }
             renderItem={({ item }) => (
-              <Primary 
+              <PrimaryPlantCard 
                 data={item}
                 onPress={() => handlePlantSelect(item)}
               />
