@@ -19,7 +19,7 @@ interface PlantProps extends RectButtonProps {
 }
 
 
-export const Secondary = ({ data, ...rest }: PlantProps) => {
+export const SecondaryPlantCard = ({ data, ...rest }: PlantProps) => {
   return (
     <RectButton 
       style={styles.container} 
