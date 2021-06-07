@@ -11,7 +11,7 @@ import {
   ScrollView
 } from 'react-native';
 import { SvgFromUri } from 'react-native-svg';
-import { useRoute } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { format, isBefore } from 'date-fns';
 
@@ -32,6 +32,7 @@ export const PlantSave = () => {
   const [showDatePicker, setShowDatePicker] = useState(Platform.OS == 'ios');
 
   const route = useRoute();
+  const navigation = useNavigation()
   const { plant } = route.params as Params;
 
   const handleChangeTime = (e: Event, dateTime: Date | undefined) => {
@@ -54,7 +55,13 @@ export const PlantSave = () => {
         dateTimeNotification: selectedDateTime
       });
 
-      Alert.alert('Sucesso')
+      navigation.navigate('Confirmation', {
+        title: 'Tudo certo',
+        subtitle: 'Fique tranquilo que sempre vamos lembrar você de cuidar da sua plantinha com muito cuidado',
+        buttonTitle: 'Muito obrigado',
+        icon: 'hug',
+        nextScreen: 'MyPlants',
+      });
 
     } catch (err) {
       console.log('erro da tela',err)
